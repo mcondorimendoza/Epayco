@@ -3,7 +3,12 @@ const path = require('path'); //Para union de directorios
 const morgan = require('morgan');
 const mysql = require('mysql');
 const myConnection = require('express-myconnection');
+
 const app = express(); // Inicializacion de Express
+
+//Importando routes
+const customerRoutes = require('./routes/customer');
+
 
 // Settings
 //Uso del puerto 3000 para el servidor
@@ -19,12 +24,23 @@ app.use(myConnection(mysql, {
     user: 'root',
     password: 'password',
     port: 3306,
-    database: 'crudnodejsmysql'
+    database: 'crudnodejsmysql',
+    insecureAuth : true
 
 }, 'single'));
 
 //routes
+app.use('/', customerRoutes);
 
+//Archivos estaticos
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+//cliente
+
+
+//Inicializando el servidor
 app.listen(app.get('port'), () => {
     console.log('Server en el puerto 3000');
 });
